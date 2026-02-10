@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Quiz - GetEducated.ai</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            top: -250px;
+            left: -250px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(45deg, #ec4899, #8b5cf6);
+            bottom: -200px;
+            right: -200px;
+            animation-delay: 5s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #06b6d4, #6366f1);
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(100px, -50px) scale(1.1); }
+            66% { transform: translate(-50px, 100px) scale(0.9); }
+        }
+
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Logo */
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 40px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+        }
+
+        /* Question */
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ec4899;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            line-height: 1.3;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .option:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: #6366f1;
+            transform: translateX(8px);
+        }
+
+        .option:hover::before {
+            left: 100%;
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.2));
+            border-color: #ec4899;
+        }
+
+        .option.selected::after {
+            content: '✓';
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            color: #ec4899;
+            font-weight: bold;
+        }
+
+        .multi-select-hint {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 16px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .option-text {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .button-container {
+            margin-top: 32px;
+            display: flex;
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            color: #ffffff;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-next::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-next:hover::before {
+            left: 100%;
+        }
+
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 32px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(236, 72, 153, 0.8); }
+        }
+
+        .start-title {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #ffffff, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .start-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .start-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .feature-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Email Capture */
+        .email-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .email-screen.active {
+            display: block;
+        }
+
+        .score-display {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 32px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.6);
+            animation: scaleIn 0.6s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes scorePopIn {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            70% { transform: scale(1.1) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .score-number {
+            font-size: 56px;
+            font-weight: 800;
+        }
+
+        .score-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+
+        .email-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .email-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .email-input {
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .email-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+        }
+
+        .results-screen.active {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .archetype-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            font-size: 18px;
+        }
+
+        .results-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .results-description {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .roadmap-section {
+            margin-bottom: 32px;
+        }
+
+        .roadmap-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .roadmap-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .roadmap-phases {
+            display: grid;
+            gap: 20px;
+        }
+
+        .phase {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #6366f1, #ec4899);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .phase-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .phase-duration {
+            font-size: 14px;
+            color: #ec4899;
+            font-weight: 600;
+        }
+
+        .phase-content {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: #6366f1;
+            transform: translateY(-4px);
+        }
+
+        .tool-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .tool-description {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .quick-win {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.2));
+            border: 2px solid rgba(236, 72, 153, 0.5);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .quick-win-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-win-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .cta-primary {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            color: #ffffff;
+        }
+
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 32px 24px;
+            }
+
+            .question-text {
+                font-size: 24px;
+            }
+
+            .start-title {
+                font-size: 32px;
+            }
+
+            .start-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo">GetEducated.ai</div>
+
+        <div class="card">
+            <!-- Start Screen -->
+            <div id="startScreen" class="start-screen">
+                <div class="start-icon">🧠</div>
+                <h1 class="start-title">Discover Your AI Path</h1>
+                <p class="start-subtitle">Take this 10-question quiz to get your personalized AI roadmap, tailored tools, and actionable next steps.</p>
+                
+                <div class="start-features">
+                    <div class="feature">
+                        <div class="feature-icon">⚡</div>
+                        <div class="feature-text">2 minutes to complete</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-text">Personalized roadmap</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🛠️</div>
+                        <div class="feature-text">Curated tool recommendations</div>
+                    </div>
+                </div>
+
+                <!-- Email capture BEFORE quiz -->
+                <div style="background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 32px; margin-top: 32px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 16px; color: rgba(255, 255, 255, 0.8); margin-bottom: 24px; text-align: center;">
+                        Enter your email to start and get your results
+                    </p>
+                    <form id="startForm" onsubmit="captureEmailAndStart(event)">
+                        <input type="text" class="email-input" id="startNameInput" placeholder="Your Name" required style="margin-bottom: 12px; width: 100%;">
+                        <input type="email" class="email-input" id="startEmailInput" placeholder="Your Email" required style="margin-bottom: 16px; width: 100%;">
+                        <button type="submit" class="btn btn-next" style="width: 100%;">
+                            Start Your Journey →
+                        </button>
+                    </form>
+                    <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 12px; text-align: center;">
+                        We'll send you AI resources and your roadmap results
+                    </p>
+                </div>
+            </div>
+
+            <!-- Quiz Container -->
+            <div id="quizContainer" style="display: none;">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Question 1 of 10</div>
+                </div>
+
+                <div id="questionsContainer"></div>
+
+                <div class="button-container">
+                    <button class="btn btn-back" id="backBtn" onclick="previousQuestion()" style="display: none;">← Back</button>
+                    <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+                </div>
+            </div>
+
+            <!-- Email Capture Screen -->
+            <!-- Results Screen -->
+            <div id="resultsScreen" class="results-screen">
+                <!-- Results will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data
+        const questions = [
+            {
+                number: 1,
+                text: "What are your goals with AI? (Select all that apply)",
+                multiSelect: true,
+                options: [
+                    { text: "Create content faster (writing, videos, social media)", value: "content", score: { content: 3 } },
+                    { text: "Build products or apps (SaaS, MVPs, automations)", value: "build", score: { build: 3 } },
+                    { text: "Design and create visually (graphics, branding, art)", value: "creative", score: { creative: 3 } },
+                    { text: "Save time and automate repetitive tasks", value: "automation", score: { automation: 3 } },
+                    { text: "I'm exploring - not sure yet", value: "exploring", score: { exploring: 1 } }
+                ]
+            },
+            {
+                number: 2,
+                text: "What's your current experience with AI tools?",
+                options: [
+                    { text: "Complete beginner - never used AI tools", value: "beginner", score: { skillLevel: 1 } },
+                    { text: "I've tried ChatGPT or basic AI tools", value: "novice", score: { skillLevel: 2 } },
+                    { text: "I use AI regularly but want to level up", value: "intermediate", score: { skillLevel: 3 } },
+                    { text: "Advanced - I integrate AI into workflows", value: "advanced", score: { skillLevel: 4 } }
+                ]
+            },
+            {
+                number: 3,
+                text: "What's your biggest challenge with AI right now?",
+                options: [
+                    { text: "I don't know where to start", value: "overwhelmed", score: { pain: "start" } },
+                    { text: "Too many tools, not sure which to use", value: "choice", score: { pain: "choice" } },
+                    { text: "I know what I want but lack technical skills", value: "technical", score: { pain: "technical" } },
+                    { text: "I'm using AI but not getting great results", value: "results", score: { pain: "results" } }
+                ]
+            },
+            {
+                number: 4,
+                text: "How much time can you dedicate to learning AI weekly?",
+                options: [
+                    { text: "1-2 hours (I'm busy but committed)", value: "minimal", score: { timeCommit: 1 } },
+                    { text: "3-5 hours (I can make it a priority)", value: "moderate", score: { timeCommit: 2 } },
+                    { text: "6-10 hours (This is important to me)", value: "significant", score: { timeCommit: 3 } },
+                    { text: "10+ hours (I'm all in)", value: "fulltime", score: { timeCommit: 4 } }
+                ]
+            },
+            {
+                number: 5,
+                text: "What best describes your role or situation?",
+                options: [
+                    { text: "Creator/Influencer (content, personal brand)", value: "creator", score: { role: "creator" } },
+                    { text: "Entrepreneur/Founder (building a business)", value: "entrepreneur", score: { role: "entrepreneur" } },
+                    { text: "Freelancer/Consultant (client services)", value: "freelancer", score: { role: "freelancer" } },
+                    { text: "Professional/Employee (looking to upskill)", value: "professional", score: { role: "professional" } }
+                ]
+            },
+            {
+                number: 6,
+                text: "What's most important to you in the next 90 days?",
+                options: [
+                    { text: "Generate income or grow my business", value: "money", score: { priority: "revenue" } },
+                    { text: "Save time and work more efficiently", value: "time", score: { priority: "efficiency" } },
+                    { text: "Learn new skills and stay relevant", value: "skills", score: { priority: "learning" } },
+                    { text: "Express creativity and build cool things", value: "creative", score: { priority: "creation" } }
+                ]
+            },
+            {
+                number: 7,
+                text: "How do you prefer to learn new skills?",
+                options: [
+                    { text: "Hands-on: Give me a project and let me build", value: "handson", score: { learnStyle: "practical" } },
+                    { text: "Structured: Step-by-step courses and tutorials", value: "structured", score: { learnStyle: "structured" } },
+                    { text: "Community: Learning with others and feedback", value: "community", score: { learnStyle: "community" } },
+                    { text: "Self-directed: I figure things out myself", value: "selfdirected", score: { learnStyle: "independent" } }
+                ]
+            },
+            {
+                number: 8,
+                text: "Which scenario excites you most?",
+                options: [
+                    { text: "Creating viral content with AI assistance", value: "content", score: { excitement: "content" } },
+                    { text: "Building an AI-powered product people pay for", value: "product", score: { excitement: "product" } },
+                    { text: "Designing stunning visuals with AI tools", value: "design", score: { excitement: "design" } },
+                    { text: "Automating my workflow to 10x productivity", value: "automation", score: { excitement: "automation" } },
+                    { text: "All of these sound amazing!", value: "all", score: { excitement: "multifaceted" } },
+                    { text: "Something else entirely", value: "other", score: { excitement: "explorer" } }
+                ]
+            },
+            {
+                number: 9,
+                text: "What's your technical comfort level?",
+                options: [
+                    { text: "I avoid tech - need no-code solutions", value: "nocode", score: { technical: 1 } },
+                    { text: "Basic - comfortable with apps and tools", value: "basic", score: { technical: 2 } },
+                    { text: "Intermediate - I can learn technical stuff", value: "intermediate", score: { technical: 3 } },
+                    { text: "Advanced - I code or want to learn coding", value: "advanced", score: { technical: 4 } }
+                ]
+            },
+            {
+                number: 10,
+                text: "In 6 months, where do you see yourself?",
+                options: [
+                    { text: "Confidently using AI daily in my work", value: "confident", score: { vision: "mastery" } },
+                    { text: "Running an AI-enhanced business or offering", value: "business", score: { vision: "business" } },
+                    { text: "Part of a community of AI-forward thinkers", value: "community", score: { vision: "community" } },
+                    { text: "Leading others and teaching what I've learned", value: "leader", score: { vision: "leadership" } }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let userData = { name: '', email: '' };
+
+        // Capture email and start quiz
+        function captureEmailAndStart(event) {
+            event.preventDefault();
+            userData.name = document.getElementById('startNameInput').value;
+            userData.email = document.getElementById('startEmailInput').value;
+            
+            // Send to your email service (ConvertKit, Mailchimp, etc.)
+            // Add your integration here
+            console.log('User signed up:', userData);
+            
+            // Optional: Send to webhook/API
+            // fetch('YOUR_WEBHOOK_URL', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(userData)
+            // });
+            
+            startQuiz();
+        }
+
+        // Initialize Quiz
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            renderQuestions();
+            updateProgress();
+        }
+
+        // Render all questions
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-container';
+                if (index === 0) questionDiv.classList.add('active');
+                questionDiv.id = `question-${index}`;
+
+                questionDiv.innerHTML = `
+                    <div class="question-number">Question ${q.number}</div>
+                    <h2 class="question-text">${q.text}</h2>
+                    <div class="options">
+                        ${q.options.map((opt, optIndex) => `
+                            <div class="option" onclick="selectOption(${index}, ${optIndex}, '${opt.value}')">
+                                <div class="option-text">${opt.text}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${q.multiSelect ? '<div class="multi-select-hint">✨ You can select multiple options</div>' : ''}
+                `;
+
+                container.appendChild(questionDiv);
+            });
+        }
+
+        // Select option
+        function selectOption(questionIndex, optionIndex, value) {
+            const question = questions[questionIndex];
+            const questionDiv = document.getElementById(`question-${questionIndex}`);
+            const options = questionDiv.querySelectorAll('.option');
+            const clickedOption = options[optionIndex];
+
+            if (question.multiSelect) {
+                // Multi-select: toggle selection
+                clickedOption.classList.toggle('selected');
+                
+                // Initialize or update answers array
+                if (!answers[questionIndex]) {
+                    answers[questionIndex] = { values: [], scores: [] };
+                }
+
+                // Check if already selected
+                const valueIndex = answers[questionIndex].values.indexOf(value);
+                if (valueIndex > -1) {
+                    // Remove if already selected
+                    answers[questionIndex].values.splice(valueIndex, 1);
+                    answers[questionIndex].scores.splice(valueIndex, 1);
+                } else {
+                    // Add if not selected
+                    answers[questionIndex].values.push(value);
+                    answers[questionIndex].scores.push(question.options[optionIndex].score);
+                }
+
+                // Enable next button if at least one option selected
+                document.getElementById('nextBtn').disabled = answers[questionIndex].values.length === 0;
+            } else {
+                // Single select: remove previous selection
+                options.forEach(opt => opt.classList.remove('selected'));
+                clickedOption.classList.add('selected');
+
+                // Store answer
+                answers[questionIndex] = {
+                    value: value,
+                    score: question.options[optionIndex].score
+                };
+
+                // Enable next button
+                document.getElementById('nextBtn').disabled = false;
+            }
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+                currentQuestion++;
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                updateProgress();
+
+                // Show back button
+                document.getElementById('backBtn').style.display = 'block';
+
+                // Disable next if not answered
+                if (!answers[currentQuestion]) {
+                    document.getElementById('nextBtn').disabled = true;
+                }
+
+                // Change button text on last question
+                if (currentQuestion === questions.length - 1) {
+                    document.getElementById('nextBtn').innerHTML = 'See My Results →';
+                }
+            } else {
+                showResults();
+            }
+        }
+
+        // Previous question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+                currentQuestion--;
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                updateProgress();
+
+                // Hide back button on first question
+                if (currentQuestion === 0) {
+                    document.getElementById('backBtn').style.display = 'none';
+                }
+
+                // Enable next button if question was answered
+                document.getElementById('nextBtn').disabled = !answers[currentQuestion];
+                document.getElementById('nextBtn').innerHTML = 'Next →';
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').innerHTML = `Question ${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        // Calculate readiness score (always 7.0+)
+        function calculateScore() {
+            let totalScore = 0;
+            let maxScore = 0;
+
+            Object.values(answers).forEach(answer => {
+                // Handle multi-select answers
+                if (answer.scores && Array.isArray(answer.scores)) {
+                    answer.scores.forEach(scoreObj => {
+                        Object.values(scoreObj).forEach(val => {
+                            if (typeof val === 'number') {
+                                totalScore += val;
+                                maxScore += 4;
+                            }
+                        });
+                    });
+                }
+                // Handle single-select answers
+                else if (answer.score) {
+                    Object.values(answer.score).forEach(val => {
+                        if (typeof val === 'number') {
+                            totalScore += val;
+                            maxScore += 4;
+                        }
+                    });
+                }
+            });
+
+            if (maxScore === 0) return "8.5"; // Default if no numeric scores
+            
+            // Calculate base score (0-10 scale)
+            let baseScore = (totalScore / maxScore) * 10;
+            
+            // Normalize to 7.0-9.5 range (everyone is AI-ready!)
+            // Formula: 7.0 + (baseScore / 10) * 2.5
+            let finalScore = 7.0 + (baseScore / 10) * 2.5;
+            
+            return finalScore.toFixed(1);
+        }
+
+        // Determine archetype
+        function determineArchetype() {
+            const archetypes = {
+                content: {
+                    name: "The AI-Powered Creator",
+                    icon: "✨",
+                    description: "You're positioned to revolutionize content creation. Your path is about leveraging AI to amplify your voice, scale your creative output, and build a sustainable creator business."
+                },
+                build: {
+                    name: "The Digital Architect",
+                    icon: "🏗️",
+                    description: "You're ready to build products that matter. Your path combines AI tools with strategic thinking to create MVPs, SaaS products, and automated systems that generate real value."
+                },
+                creative: {
+                    name: "The Visual Innovator",
+                    icon: "🎨",
+                    description: "You're poised to push creative boundaries. Your path is about mastering AI-powered design tools to create stunning visuals, brands, and experiences that captivate audiences."
+                },
+                automation: {
+                    name: "The Efficiency Engineer",
+                    icon: "⚙️",
+                    description: "You're built for optimization. Your path focuses on workflow automation, productivity systems, and using AI to reclaim time while multiplying your output."
+                },
+                renaissance: {
+                    name: "The Renaissance Builder",
+                    icon: "🌟",
+                    description: "You're a multifaceted creator who sees AI as the ultimate leverage tool. Your path integrates content, design, automation, and building into a cohesive system where each skill amplifies the others. You're building an empire, not just a business."
+                }
+            };
+
+            const scores = {
+                content: 0,
+                build: 0,
+                creative: 0,
+                automation: 0
+            };
+
+            // Track if user selected multiple goals in Q1
+            let multipleGoals = false;
+            if (answers[0] && answers[0].values && answers[0].values.length > 2) {
+                multipleGoals = true;
+            }
+
+            Object.values(answers).forEach(answer => {
+                // Handle multi-select answers
+                if (answer.scores && Array.isArray(answer.scores)) {
+                    answer.scores.forEach(scoreObj => {
+                        Object.keys(scoreObj).forEach(key => {
+                            if (scores.hasOwnProperty(key)) {
+                                scores[key] += scoreObj[key];
+                            }
+                        });
+                    });
+                } 
+                // Handle single-select answers
+                else if (answer.score) {
+                    Object.keys(answer.score).forEach(key => {
+                        if (scores.hasOwnProperty(key)) {
+                            scores[key] += answer.score[key];
+                        }
+                    });
+                }
+            });
+
+            // If user has multiple goals (3+) or selected "all" in Q8, they're a Renaissance Builder
+            const allScores = Object.values(scores);
+            const maxScore = Math.max(...allScores);
+            const topScores = allScores.filter(s => s >= maxScore * 0.7).length;
+
+            if (multipleGoals || topScores >= 3) {
+                return archetypes.renaissance;
+            }
+
+            const archetype = Object.keys(scores).find(key => scores[key] === maxScore);
+
+            return archetypes[archetype] || archetypes.content;
+        }
+
+        // Generate personalized roadmap
+        function generateRoadmap() {
+            try {
+                const archetype = determineArchetype();
+                console.log('Archetype:', archetype); // Debug log
+                
+                const skillLevel = answers[1]?.score?.skillLevel || 1;
+                const technical = answers[8]?.score?.technical || 1;
+
+                // Determine primary focus from answers
+                let primaryFocus = 'content';
+                
+                // Check if they're a Renaissance Builder
+                const isRenaissance = archetype.name === "The Renaissance Builder";
+                console.log('Is Renaissance:', isRenaissance); // Debug log
+                
+                if (isRenaissance) {
+                    primaryFocus = 'renaissance';
+                } else if (answers[0]) {
+                    // For multi-select, use first selection as primary
+                    if (answers[0].values && answers[0].values.length > 0) {
+                        primaryFocus = answers[0].values[0];
+                    } else if (answers[0].value) {
+                        primaryFocus = answers[0].value;
+                    }
+                }
+                
+                console.log('Primary Focus:', primaryFocus); // Debug log
+
+            const roadmaps = {
+                content: {
+                    phases: [
+                        {
+                            title: "Foundation (Days 1-30)",
+                            duration: "30 days",
+                            content: "Master ChatGPT and Claude for content ideation, outlining, and drafting. Learn prompt engineering basics. Start creating content with AI assistance daily. Set up your AI content workflow."
+                        },
+                        {
+                            title: "Acceleration (Days 31-60)",
+                            duration: "30 days",
+                            content: "Integrate video tools (Kling 3.0, CapCut) and design tools (Freepik AI, Canva AI). Build content systems that let you produce 10x faster. Start monetizing your AI-enhanced content."
+                        },
+                        {
+                            title: "Mastery (Days 61-90)",
+                            duration: "30 days",
+                            content: "Create your signature AI content system. Automate social media with Make/n8n. Build a content empire that runs semi-autonomously. Position yourself as an AI-forward creator."
+                        }
+                    ],
+                    tools: [
+                        { name: "Claude", description: "Best AI for long-form content" },
+                        { name: "ChatGPT", description: "Quick ideas & brainstorming" },
+                        { name: "Kling 3.0", description: "Viral AI video generation" },
+                        { name: "Freepik AI", description: "AI images & mockups" },
+                        { name: "CapCut", description: "AI video editing & captions" },
+                        { name: "Notion AI", description: "Content planning & organization" }
+                    ],
+                    quickWin: "Create your next 30 days of content in 2 hours using Claude. Use this prompt: 'I'm a [your niche] creator. Generate 30 content ideas with hooks and key points for [platform]. My audience struggles with [pain point].'"
+                },
+                build: {
+                    phases: [
+                        {
+                            title: "Foundation (Days 1-30)",
+                            duration: "30 days",
+                            content: "Learn no-code tools (Lovable, v0) to build your first AI-powered app. Understand API integrations and AI capabilities. Ship your first MVP, even if imperfect."
+                        },
+                        {
+                            title: "Acceleration (Days 31-60)",
+                            duration: "30 days",
+                            content: "Add automation layer with n8n or Make. Integrate Claude API for custom AI features. Start validating with real users and iterate based on feedback."
+                        },
+                        {
+                            title: "Mastery (Days 61-90)",
+                            duration: "30 days",
+                            content: "Build your second product faster than your first. Create systems for rapid prototyping. Position yourself to capture opportunities as they emerge in the AI space."
+                        }
+                    ],
+                    tools: [
+                        { name: "Lovable", description: "No-code AI app builder" },
+                        { name: "Cursor", description: "AI-powered coding assistant" },
+                        { name: "Claude", description: "Best AI for complex logic" },
+                        { name: "v0 by Vercel", description: "Generate UI components" },
+                        { name: "Supabase", description: "Backend & database" },
+                        { name: "Make/n8n", description: "Workflow automation" }
+                    ],
+                    quickWin: "Build a simple AI tool this week using Lovable. Start with something you'd use: a content analyzer, idea generator, or personal dashboard. Ship it publicly even if it's basic."
+                },
+                creative: {
+                    phases: [
+                        {
+                            title: "Foundation (Days 1-30)",
+                            duration: "30 days",
+                            content: "Master Freepik AI and Midjourney for image generation. Learn effective prompting for visual outputs. Create 100 images to understand AI's creative possibilities and limitations."
+                        },
+                        {
+                            title: "Acceleration (Days 31-60)",
+                            duration: "30 days",
+                            content: "Add video creation (Kling 3.0, Runway ML) and design tools (Figma AI plugins). Develop your signature AI-enhanced visual style. Start client work or sell your creations."
+                        },
+                        {
+                            title: "Mastery (Days 61-90)",
+                            duration: "30 days",
+                            content: "Combine tools to create complex visual projects. Build automated design systems. Position yourself as an AI creative director who delivers impossible timelines."
+                        }
+                    ],
+                    tools: [
+                        { name: "Freepik AI", description: "AI images & mockups" },
+                        { name: "Kling 3.0", description: "Best AI video generation" },
+                        { name: "Figma", description: "Design with AI plugins" },
+                        { name: "Midjourney", description: "Premium AI art" },
+                        { name: "Runway ML", description: "AI video editing suite" },
+                        { name: "Leonardo.ai", description: "Consistent AI characters" }
+                    ],
+                    quickWin: "Create a 30-day visual content series using Freepik AI. Pick a theme, generate variations, and post daily. This builds your portfolio while mastering the tool."
+                },
+                automation: {
+                    phases: [
+                        {
+                            title: "Foundation (Days 1-30)",
+                            duration: "30 days",
+                            content: "Learn Make or n8n basics. Map your current workflows and identify automation opportunities. Build 3 simple automations that save you 5+ hours weekly."
+                        },
+                        {
+                            title: "Acceleration (Days 31-60)",
+                            duration: "30 days",
+                            content: "Integrate AI into your automations with Claude API and Gemini. Build smart workflows that make decisions, generate content, and handle complexity automatically."
+                        },
+                        {
+                            title: "Mastery (Days 61-90)",
+                            duration: "30 days",
+                            content: "Create your AI operating system - interconnected automations that run your entire workflow. Package and sell your automation systems to others."
+                        }
+                    ],
+                    tools: [
+                        { name: "Make", description: "Visual workflow automation" },
+                        { name: "Claude", description: "AI for complex decisions" },
+                        { name: "Notion", description: "AI-powered workspace" },
+                        { name: "Zapier", description: "Quick app connections" },
+                        { name: "Airtable", description: "Database automation" },
+                        { name: "n8n", description: "Self-hosted workflows" }
+                    ],
+                    quickWin: "Automate your most repetitive task today using Make. Start simple: auto-save emails, organize files, or sync data between apps. You'll save 30+ minutes this week."
+                },
+                renaissance: {
+                    phases: [
+                        {
+                            title: "Integration Phase (Days 1-30)",
+                            duration: "30 days",
+                            content: "Build your AI foundation across all domains. Master Claude for content, Freepik for visuals, and Make for basic automation. Create your first integrated project that combines all three skills."
+                        },
+                        {
+                            title: "Amplification Phase (Days 31-60)",
+                            duration: "30 days",
+                            content: "Layer in product building with Lovable and video with Kling 3.0. Create an automated content system that generates, designs, and distributes. Build a simple tool that showcases your multifaceted skillset."
+                        },
+                        {
+                            title: "Empire Phase (Days 61-90)",
+                            duration: "30 days",
+                            content: "Integrate everything into your personal operating system. Content feeds your products. Products generate content. Automation runs it all. You've built an ecosystem, not just outputs."
+                        }
+                    ],
+                    tools: [
+                        { name: "Claude", description: "Your AI co-founder" },
+                        { name: "Kling 3.0", description: "Viral video content" },
+                        { name: "Freepik AI", description: "Visual assets on demand" },
+                        { name: "Lovable", description: "Build products fast" },
+                        { name: "Make", description: "Connect everything" },
+                        { name: "Notion", description: "Your command center" }
+                    ],
+                    quickWin: "Build a mini ecosystem this week: Use Claude to generate a content idea, Freepik AI to create the visual, Make to auto-post it, and Notion to track performance. See how the pieces connect."
+                }
+            };
+
+            return {
+                archetype: archetype,
+                roadmap: roadmaps[primaryFocus] || roadmaps['content'],
+                skillLevel: skillLevel,
+                technical: technical
+            };
+            } catch (error) {
+                console.error('Error in generateRoadmap:', error);
+                console.error('Error stack:', error.stack);
+                // Return default values in case of error
+                return {
+                    archetype: {
+                        name: "The AI-Powered Creator",
+                        icon: "✨",
+                        description: "You're positioned to revolutionize content creation. Your path is about leveraging AI to amplify your voice, scale your creative output, and build a sustainable creator business."
+                    },
+                    roadmap: {
+                        phases: [
+                            {
+                                title: "Foundation (Days 1-30)",
+                                duration: "30 days",
+                                content: "Master ChatGPT and Claude for content ideation, outlining, and drafting. Learn prompt engineering basics. Start creating content with AI assistance daily."
+                            },
+                            {
+                                title: "Acceleration (Days 31-60)",
+                                duration: "30 days",
+                                content: "Integrate video tools (Descript, Runway ML) and design tools (Midjourney, Canva AI). Build content systems that let you produce 10x faster."
+                            },
+                            {
+                                title: "Mastery (Days 61-90)",
+                                duration: "30 days",
+                                content: "Create your signature AI content system. Automate social media with Make/n8n. Build a content empire that runs semi-autonomously."
+                            }
+                        ],
+                        tools: [
+                            { name: "ChatGPT/Claude", description: "AI writing & brainstorming" },
+                            { name: "Descript", description: "AI video editing" },
+                            { name: "Midjourney", description: "AI image generation" },
+                            { name: "Canva AI", description: "Quick design work" },
+                            { name: "Make/n8n", description: "Content automation" }
+                        ],
+                        quickWin: "Create your next 30 days of content in 2 hours using ChatGPT."
+                    },
+                    skillLevel: 1,
+                    technical: 1
+                };
+            }
+        }
+
+        // Show full results immediately
+        function showResults() {
+            const score = calculateScore();
+            const result = generateRoadmap();
+            
+            document.getElementById('quizContainer').style.display = 'none';
+            
+            // Send quiz completion data to your backend/email service
+            const completionData = {
+                ...userData,
+                archetype: result.archetype.name,
+                score: score,
+                answers: answers,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('Quiz completed:', completionData);
+            
+            // Optional: Send to webhook for email automation
+            // fetch('YOUR_WEBHOOK_URL', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(completionData)
+            // });
+            
+            const resultsHTML = `
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <div style="font-size: 18px; font-weight: 600; color: #ec4899; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 2px;">
+                        🎉 Congratulations, ${userData.name}!
+                    </div>
+                    <div style="font-size: 80px; margin-bottom: 20px; animation: bounceIn 0.8s ease;">${result.archetype.icon}</div>
+                    <div class="archetype-badge" style="font-size: 22px; padding: 14px 28px;">${result.archetype.name}</div>
+                    <p class="results-description" style="margin-top: 24px;">${result.archetype.description}</p>
+                    
+                    <!-- Smaller, animated readiness score -->
+                    <div style="margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                        <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 1px;">
+                            Your AI Readiness
+                        </div>
+                        <div style="
+                            width: 80px; 
+                            height: 80px; 
+                            background: linear-gradient(135deg, #6366f1, #ec4899); 
+                            border-radius: 50%; 
+                            display: flex; 
+                            align-items: center; 
+                            justify-content: center;
+                            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+                            animation: scorePopIn 0.6s ease 0.3s backwards;
+                        ">
+                            <div style="font-size: 28px; font-weight: 800;">${score}</div>
+                        </div>
+                    </div>
+                    
+                    <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-top: 24px;">
+                        ✅ We've sent this roadmap to ${userData.email}
+                    </p>
+                </div>
+
+                <div class="quick-win">
+                    <div class="quick-win-title">
+                        ⚡ Your Quick Win This Week
+                    </div>
+                    <div class="quick-win-content">
+                        ${result.roadmap.quickWin}
+                    </div>
+                </div>
+
+                <div class="roadmap-section">
+                    <div class="roadmap-title">
+                        <div class="roadmap-icon">🗺️</div>
+                        Your Complete 90-Day Roadmap
+                    </div>
+                    <div class="roadmap-phases">
+                        ${result.roadmap.phases.map((phase, index) => `
+                            <div class="phase" style="animation: fadeIn 0.5s ease ${index * 0.1}s backwards;">
+                                <div class="phase-header">
+                                    <div class="phase-title">${phase.title}</div>
+                                    <div class="phase-duration">${phase.duration}</div>
+                                </div>
+                                <div class="phase-content">${phase.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="roadmap-section">
+                    <div class="roadmap-title">
+                        <div class="roadmap-icon">🛠️</div>
+                        Your AI Tech Stack
+                    </div>
+                    
+                    <!-- Tool Cards with Icons -->
+                    <div class="tools-grid">
+                        ${result.roadmap.tools.map((tool, index) => `
+                            <div class="tool-card" style="animation: fadeIn 0.5s ease ${index * 0.05}s backwards;">
+                                <div style="font-size: 32px; margin-bottom: 12px;">${getToolIcon(tool.name)}</div>
+                                <div class="tool-name">${tool.name}</div>
+                                <div class="tool-description">${tool.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <!-- Visual Flow -->
+                    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(236, 72, 153, 0.08)); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 16px; padding: 24px; margin-top: 24px; text-align: center;">
+                        <p style="font-size: 13px; color: rgba(255, 255, 255, 0.6); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;">
+                            Your Workflow
+                        </p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; max-width: 650px; margin: 0 auto;">
+                            ${result.roadmap.tools.map((tool, index) => `
+                                <div style="
+                                    background: rgba(99, 102, 241, 0.15);
+                                    padding: 8px 16px;
+                                    border-radius: 8px;
+                                    font-weight: 600;
+                                    font-size: 13px;
+                                    border: 1px solid rgba(99, 102, 241, 0.3);
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 6px;
+                                ">
+                                    <span style="font-size: 16px;">${getToolIcon(tool.name)}</span>
+                                    <span>${tool.name}</span>
+                                </div>
+                                ${index < result.roadmap.tools.length - 1 ? '<div style="color: #ec4899; font-size: 16px;">→</div>' : ''}
+                            `).join('')}
+                        </div>
+                        <p style="font-size: 12px; color: rgba(255, 255, 255, 0.5); margin-top: 16px; font-style: italic;">
+                            These tools work together as a system
+                        </p>
+                    </div>
+                </div>
+
+                <script>
+                    function getToolIcon(toolName) {
+                        const icons = {
+                            'Claude': '🤖',
+                            'ChatGPT': '💬',
+                            'Kling 3.0': '🎬',
+                            'Freepik AI': '🎨',
+                            'CapCut': '✂️',
+                            'Notion': '📝',
+                            'Lovable': '⚡',
+                            'Cursor': '💻',
+                            'v0 by Vercel': '🎯',
+                            'Supabase': '🗄️',
+                            'Make': '🔗',
+                            'n8n': '⚙️',
+                            'Figma': '🎨',
+                            'Midjourney': '🖼️',
+                            'Runway ML': '🎥',
+                            'Leonardo.ai': '👤',
+                            'Zapier': '⚡',
+                            'Airtable': '📊',
+                            'Gemini': '✨'
+                        };
+                        return icons[toolName] || '🔧';
+                    }
+                </script>
+
+                <!-- Comparison Table -->
+                <div style="margin: 40px auto; max-width: 600px;">
+                    <div style="background: rgba(255, 255, 255, 0.02); border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08);">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255, 255, 255, 0.05);">
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.5);">
+                                Scattered tutorials
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.85); border-left: 2px solid rgba(99, 102, 241, 0.3);">
+                                Structured path
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.5);">
+                                Guessing tools
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.85); border-left: 2px solid rgba(99, 102, 241, 0.3);">
+                                Curated stack
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.5);">
+                                No feedback
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.85); border-left: 2px solid rgba(99, 102, 241, 0.3);">
+                                Expert guidance
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.5);">
+                                Alone & stuck
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.85); border-left: 2px solid rgba(99, 102, 241, 0.3);">
+                                Community support
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.5);">
+                                6-12 months
+                            </div>
+                            <div style="background: rgba(10, 10, 15, 0.95); padding: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.85); border-left: 2px solid rgba(99, 102, 241, 0.3);">
+                                90-day roadmap
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-section">
+                    <h3 class="cta-title">Ready to Execute This Roadmap?</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 24px; font-size: 18px; line-height: 1.6;">
+                        This roadmap only works if you actually <strong>execute it</strong>. Join GetEducated.ai to get access to step-by-step courses, expert guidance, and a community of AI builders who will help you master these tools and stay accountable.
+                    </p>
+                    <div class="cta-buttons" style="justify-content: center;">
+                        <a href="https://geteducated.ai" class="cta-button cta-primary" target="_blank" style="font-size: 18px; padding: 20px 40px;">
+                            Join the Community →
+                        </a>
+                    </div>
+                    <p style="font-size: 14px; color: rgba(255, 255, 255, 0.5); margin-top: 20px; text-align: center;">
+                        Get instant access to courses, live workshops, and support from other members
+                    </p>
+                </div>
+            `;
+
+            document.getElementById('resultsScreen').innerHTML = resultsHTML;
+            document.getElementById('resultsScreen').classList.add('active');
+        }
+
+        // Download results (placeholder)
+        function downloadResults() {
+            // Opens print dialog - user can save as PDF
+            window.print();
+        }
+    </script>
+</body>
+</html>
