@@ -330,27 +330,32 @@
 
         .start-features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
             text-align: left;
         }
 
         .feature {
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
+            padding: 16px 12px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .feature-icon {
-            font-size: 24px;
+            font-size: 22px;
             margin-bottom: 8px;
         }
 
         .feature-text {
-            font-size: 14px;
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
         }
 
         /* Email Capture */
@@ -651,19 +656,108 @@
         }
 
         @media (max-width: 768px) {
-            .card {
-                padding: 32px 24px;
+            .container {
+                padding: 16px 12px;
             }
 
-            .question-text {
-                font-size: 24px;
+            .card {
+                padding: 24px 16px;
+                border-radius: 20px;
+            }
+
+            .logo {
+                font-size: 18px;
+                margin-bottom: 20px;
             }
 
             .start-title {
-                font-size: 32px;
+                font-size: 28px;
+                line-height: 1.2;
             }
 
+            .start-subtitle {
+                font-size: 15px;
+            }
+
+            /* Feature cards stay 3-column on mobile, compact */
             .start-features {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                margin-bottom: 24px;
+            }
+
+            .feature {
+                padding: 12px 8px;
+                border-radius: 10px;
+            }
+
+            .feature-icon {
+                font-size: 18px;
+                margin-bottom: 6px;
+            }
+
+            .feature-text {
+                font-size: 11px;
+            }
+
+            .question-text {
+                font-size: 20px;
+                line-height: 1.3;
+            }
+
+            .option-button {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .tool-card {
+                padding: 16px 12px;
+            }
+
+            .cta-title {
+                font-size: 22px;
+            }
+
+            .cta-button {
+                font-size: 16px !important;
+                padding: 16px 24px !important;
+                width: 100%;
+                text-align: center;
+            }
+
+            .archetype-badge {
+                font-size: 16px !important;
+                padding: 10px 20px !important;
+            }
+
+            .phase {
+                padding: 16px;
+            }
+
+            .phase-title {
+                font-size: 15px;
+            }
+
+            .email-input {
+                font-size: 16px; /* prevents iOS zoom */
+            }
+        }
+
+        @media (max-width: 380px) {
+            .start-title {
+                font-size: 24px;
+            }
+
+            .feature-text {
+                font-size: 10px;
+            }
+
+            .tools-grid {
                 grid-template-columns: 1fr;
             }
         }
