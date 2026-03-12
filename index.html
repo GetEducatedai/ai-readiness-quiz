@@ -745,6 +745,32 @@
     </div>
 
     <script>
+        // Tool icon helper
+        function getToolIcon(toolName) {
+            const icons = {
+                'Claude': '🤖',
+                'ChatGPT': '💬',
+                'Kling 3.0': '🎬',
+                'Freepik AI': '🎨',
+                'CapCut': '✂️',
+                'Notion': '📝',
+                'Lovable': '⚡',
+                'Cursor': '💻',
+                'v0 by Vercel': '🎯',
+                'Supabase': '🗄️',
+                'Make': '🔗',
+                'n8n': '⚙️',
+                'Figma': '🎨',
+                'Midjourney': '🖼️',
+                'Runway ML': '🎥',
+                'Leonardo.ai': '👤',
+                'Zapier': '⚡',
+                'Airtable': '📊',
+                'Gemini': '✨'
+            };
+            return icons[toolName] || '🔧';
+        }
+
         // Quiz Data
         const questions = [
             {
@@ -1481,33 +1507,6 @@
                         </p>
                     </div>
                 </div>
-
-                <script>
-                    function getToolIcon(toolName) {
-                        const icons = {
-                            'Claude': '🤖',
-                            'ChatGPT': '💬',
-                            'Kling 3.0': '🎬',
-                            'Freepik AI': '🎨',
-                            'CapCut': '✂️',
-                            'Notion': '📝',
-                            'Lovable': '⚡',
-                            'Cursor': '💻',
-                            'v0 by Vercel': '🎯',
-                            'Supabase': '🗄️',
-                            'Make': '🔗',
-                            'n8n': '⚙️',
-                            'Figma': '🎨',
-                            'Midjourney': '🖼️',
-                            'Runway ML': '🎥',
-                            'Leonardo.ai': '👤',
-                            'Zapier': '⚡',
-                            'Airtable': '📊',
-                            'Gemini': '✨'
-                        };
-                        return icons[toolName] || '🔧';
-                    }
-                </script>
 
                 <div class="cta-section">
                     <h3 class="cta-title">Ready to Execute This Roadmap?</h3>
