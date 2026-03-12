@@ -1480,14 +1480,18 @@
                 timestamp: new Date().toISOString()
             };
             
-            console.log('Quiz completed:', completionData);
-            
-            // Optional: Send to webhook for email automation
-            // fetch('YOUR_WEBHOOK_URL', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(completionData)
-            // });
+            // Send to Klaviyo via serverless function
+            fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: userData.name,
+                    email: userData.email,
+                    archetype: result.archetype.name,
+                    score: score,
+                    tools: result.roadmap.tools.map(t => t.name),
+                }),
+            }).catch(err => console.error('Subscribe error:', err));
             
             const resultsHTML = `
                 <div style="text-align: center; margin-bottom: 40px;">
